@@ -11,7 +11,5 @@ namespace Conduit.Db
         public int FavouriteId { get; set; }
         public int UserId { get; set; }
         public int ArticleId { get; set; }
-        public Article Articles { get; set; }
-        public User Users { get; set; }
     }
 }

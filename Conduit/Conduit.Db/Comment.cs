@@ -10,5 +10,6 @@ namespace Conduit.Db
     {
         public int CommentId { get; set; }
         public string content { get; set; }
+
     }
 }

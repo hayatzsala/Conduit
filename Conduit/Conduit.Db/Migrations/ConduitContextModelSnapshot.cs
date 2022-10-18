@@ -42,8 +42,8 @@ namespace Conduit.Db.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ArticleId");
 
@@ -63,8 +63,8 @@ namespace Conduit.Db.Migrations
                     b.Property<int?>("ArticleId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("content")
                         .IsRequired()
@@ -93,37 +93,38 @@ namespace Conduit.Db.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("UserId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("FavouriteId");
 
                     b.HasIndex("ArticleId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Favourites");
                 });
 
             modelBuilder.Entity("Conduit.Db.Follower", b =>
                 {
-                    b.Property<int>("FollowerId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("FollowerId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UsersUserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("FollowerId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UsersUserId");
 
                     b.ToTable("Followers");
                 });
 
             modelBuilder.Entity("Conduit.Db.User", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Age")
                         .HasColumnType("int");
@@ -159,7 +160,7 @@ namespace Conduit.Db.Migrations
             modelBuilder.Entity("Conduit.Db.Comment", b =>
                 {
                     b.HasOne("Conduit.Db.Article", null)
-                        .WithMany("Articles")
+                        .WithMany("Comments")
                         .HasForeignKey("ArticleId");
 
                     b.HasOne("Conduit.Db.User", null)
@@ -169,33 +170,33 @@ namespace Conduit.Db.Migrations
 
             modelBuilder.Entity("Conduit.Db.Favourite", b =>
                 {
-                    b.HasOne("Conduit.Db.Article", "Articles")
-                        .WithMany()
+                    b.HasOne("Conduit.Db.Article", null)
+                        .WithMany("Favourites")
                         .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Conduit.Db.User", "Users")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Articles");
-
-                    b.Navigation("Users");
+                    b.HasOne("Conduit.Db.User", null)
+                        .WithMany("Favourites")
+                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("Conduit.Db.Follower", b =>
                 {
-                    b.HasOne("Conduit.Db.User", null)
-                        .WithMany("Followers")
-                        .HasForeignKey("UserId");
+                    b.HasOne("Conduit.Db.User", "Users")
+                        .WithMany()
+                        .HasForeignKey("UsersUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Conduit.Db.Article", b =>
                 {
-                    b.Navigation("Articles");
+                    b.Navigation("Comments");
+
+                    b.Navigation("Favourites");
                 });
 
             modelBuilder.Entity("Conduit.Db.User", b =>
@@ -204,7 +205,7 @@ namespace Conduit.Db.Migrations
 
                     b.Navigation("Comments");
 
-                    b.Navigation("Followers");
+                    b.Navigation("Favourites");
                 });
 #pragma warning restore 612, 618
         }
