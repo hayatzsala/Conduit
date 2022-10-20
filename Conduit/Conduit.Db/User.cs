@@ -15,8 +15,5 @@ namespace Conduit.Db
         public string  Password { get; set; }
         public string  Bio { get; set; }
         public int  Age { get; set; }
-       /// public ICollection<Comment> Comments{ get; set; }
-       /// public ICollection<Favourite> Favourites{ get; set; }
-        ///public ICollection<Article> Articles{ get; set; }
     }
 }
