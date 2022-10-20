@@ -13,7 +13,5 @@ namespace Conduit.Db
         public string Description { get; set; }
         public string Image { get; set; }
         public ICollection<Comment> Comments { get; set; }
-       /// public ICollection<Favourite> Favourites { get; set; }
-
     }
 }

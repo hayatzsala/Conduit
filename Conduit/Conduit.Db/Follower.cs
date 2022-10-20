@@ -12,6 +12,5 @@ namespace Conduit.Db
         public Guid FollowerId { get; set; }
         public User Users { get; set; }
 
-
     }
 }
