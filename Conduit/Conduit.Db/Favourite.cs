@@ -10,6 +10,6 @@ namespace Conduit.Db
     {
         public Guid FavouriteId { get; set; }
         public Guid UserId { get; set; }
-        public int ArticleId { get; set; }
+        public Guid ArticleId { get; set; }
     }
 }
