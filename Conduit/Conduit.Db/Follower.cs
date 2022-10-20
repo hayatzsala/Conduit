@@ -9,7 +9,6 @@ namespace Conduit.Db
 {
     public class Follower
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid FollowerId { get; set; }
         public User Users { get; set; }
 
