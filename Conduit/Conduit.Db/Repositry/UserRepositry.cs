@@ -30,9 +30,6 @@ namespace Conduit.Db.Repositry
                      Email = user.Email,
                      Password = user.Password,
                      UserName = user.UserName,
-                     Articles = user.Articles,
-                     Comments = user.Comments,
-                     Favourites= user.Favourites,
                  }
 
                  );

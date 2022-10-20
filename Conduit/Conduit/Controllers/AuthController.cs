@@ -34,18 +34,14 @@ namespace Conduit.Controllers
         [HttpPost("SignIn" , Name = "SignInUser")]
         public async Task<IActionResult> SiginIn([FromBody] SignInModel model)
         {
-            ///var UserData = _mapper.Map<User>(model);
             var user = await _UserRepositry.GetUser(model.Email);
 
             if (user != null )
             {
-                // var claims = _IAuthService.GetClaim(user);
                 var HashPassword = _ipasswordHasher.VerifyPassword(model.Password,user.Password);
                 if (HashPassword)
                 {
-                    
                     var claims = _IAuthService.GetClaim(user);
-
                     var token = await _IAuthService.GetJwtSecurityToken(_configuration, claims);
 
                     return Ok(
