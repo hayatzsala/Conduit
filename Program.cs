@@ -1,11 +1,5 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Conduit.Db.Repositry;
-using Conduit.Service;
-using Conduit.Service.passwordHasher;
-using System.Configuration;
-using Conduit.helper;
+using Conduit.Db;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +13,6 @@ builder.Services.AddDbContext<ConduitContext>(options => {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
     // options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -31,7 +24,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
