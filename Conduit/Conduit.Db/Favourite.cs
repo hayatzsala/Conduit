@@ -8,8 +8,8 @@ namespace Conduit.Db
 {
     public class Favourite
     {
-        public int FavouriteId { get; set; }
-        public int UserId { get; set; }
+        public Guid FavouriteId { get; set; }
+        public Guid UserId { get; set; }
         public int ArticleId { get; set; }
     }
 }

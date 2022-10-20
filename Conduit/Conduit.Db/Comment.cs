@@ -8,7 +8,7 @@ namespace Conduit.Db
 {
     public class Comment
     {
-        public int CommentId { get; set; }
+        public Guid CommentId { get; set; }
         public string content { get; set; }
 
     }
