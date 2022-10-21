@@ -10,7 +10,6 @@ namespace Conduit.Db
     public class Follower
     {
         public Guid FollowerId { get; set; }
-        public User Users { get; set; }
-
+        public Guid? UserId { get; set; }
     }
 }

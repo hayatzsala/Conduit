@@ -10,6 +10,7 @@ namespace Conduit.Db
     {
         public Guid CommentId { get; set; }
         public string content { get; set; }
-
+        public Guid? UserId { get; set; }
+        public Guid? ArticleId { get; set; }
     }
 }

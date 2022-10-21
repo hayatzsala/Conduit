@@ -9,7 +9,8 @@ namespace Conduit.Db
     public class Favourite
     {
         public Guid FavouriteId { get; set; }
-        public Guid UserId { get; set; }
-        public Guid ArticleId { get; set; }
+        public Guid? UserId { get; set; }
+        public Guid? ArticleId { get; set; }
+
     }
 }

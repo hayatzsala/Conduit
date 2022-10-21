@@ -16,7 +16,12 @@ namespace Conduit.Db
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-           
+            modelBuilder.Entity<Follower>().HasOne<User>().WithMany().HasForeignKey(p=>p.UserId);
+            modelBuilder.Entity<Article>().HasOne<User>().WithMany().HasForeignKey(p=>p.UserId);
+            modelBuilder.Entity<Comment>().HasOne<User>().WithMany().HasForeignKey(p=>p.UserId);
+            modelBuilder.Entity<Comment>().HasOne<Article>().WithMany().HasForeignKey(p=>p.ArticleId);
+            modelBuilder.Entity<Favourite>().HasOne<Article>().WithMany().HasForeignKey(p=>p.ArticleId);
+            modelBuilder.Entity<Favourite>().HasOne<User>().WithMany().HasForeignKey(p=>p.UserId);
         }
 
         public DbSet<Article> Articles { get; set; }
