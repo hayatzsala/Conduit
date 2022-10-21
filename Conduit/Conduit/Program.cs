@@ -22,6 +22,7 @@ builder.Services.AddDbContext<ConduitContext>(options => {
     // options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IFavouriteRepositry,FavouriteRepositry>();
 
 builder.Services.AddScoped<IpasswordHasher, BycryptPasswordHasher>();
 
