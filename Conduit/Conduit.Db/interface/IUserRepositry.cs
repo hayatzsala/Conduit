@@ -13,5 +13,6 @@ namespace Conduit.Db
         public Task<bool> updateUserData(User UserTable, string Email);
         public Task<User> GetUserById(Guid id);
         public Task<IEnumerable<User>> GetAllUser();
+        public Task<Guid> GetUserID(string Email);
 }
 }

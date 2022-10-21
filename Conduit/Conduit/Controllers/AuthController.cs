@@ -44,17 +44,10 @@ namespace Conduit.Controllers
                     var claims = _IAuthService.GetClaim(user);
                     var token = await _IAuthService.GetJwtSecurityToken(_configuration, claims);
 
-                    return Ok(
-                       new AuthModel
-                       {
-                           Email = user.Email,
-                           Username = user.UserName,
-                           IsAuthenticated = true,
-                           Message = "SignInSucccefully",
-                           Token = new JwtSecurityTokenHandler().WriteToken(token),
-                           ExpiresOn = _configuration["Jwt:Duration"],
-                       }
-                        );
+                    return Ok(new AuthModel
+                    {
+                        Token = new JwtSecurityTokenHandler().WriteToken(token)
+                    }) ;
                 }
                 else
                 {

@@ -33,8 +33,13 @@ namespace Conduit.Db.Repositry
             return await _context.Users.Where(s=>s.Email.Equals(Email)).SingleOrDefaultAsync();
 
         }
+        public async Task<Guid> GetUserID(string Email)
+        {
 
+         var user = await _context.Users.Where(s => s.Email.Equals(Email)).SingleOrDefaultAsync();
+            return user.UserId;
 
+        }
         public async Task<bool> updateUserData(User UserTable,string Email)
         {
             var User = await GetUserByEmail(Email);
