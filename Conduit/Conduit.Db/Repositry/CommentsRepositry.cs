@@ -12,7 +12,6 @@ namespace Conduit.Db.Repositry
 
         private readonly ConduitContext _context;
 
-
         public CommentsRepositry(ConduitContext context, IArticlesRepositry articlesRepositry)
         {
             _context = context;
