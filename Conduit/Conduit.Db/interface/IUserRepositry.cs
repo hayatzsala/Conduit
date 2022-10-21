@@ -9,9 +9,9 @@ namespace Conduit.Db
     public interface IUserRepositry
 {
         public  Task<bool> CreateUser(User user);
-        public  Task<User> GetUser(string Email);
-        public void updateUserData(User UserTable);
+        public  Task<User> GetUserByEmail(string Email);
+        public Task<bool> updateUserData(User UserTable, string Email);
         public Task<User> GetUserById(Guid id);
-        public  Task<bool> DeleteUser(Guid id);
+        public Task<IEnumerable<User>> GetAllUser();
 }
 }

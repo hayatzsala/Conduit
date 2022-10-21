@@ -13,7 +13,7 @@ namespace Conduit.Service
         {
             return new List<Claim>() {
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        new Claim("UserId", model.UserId.ToString()),
+                        new Claim(ClaimTypes.NameIdentifier, model.UserId.ToString()),
                         new Claim(ClaimTypes.Name, model.UserName),
                         new Claim(ClaimTypes.Email, model.Email)
                     };
