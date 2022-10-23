@@ -30,14 +30,15 @@ namespace Conduit.Db.Repositry
 
         public async Task<User> GetUserByEmail(string Email)
         {
-            return await _context.Users.Where(s=>s.Email.Equals(Email)).SingleOrDefaultAsync();
+            return await _context.Users.Where(s=>s.Email.Equals(Email)).SingleOrDefaultAsync()??null;
 
         }
         public async Task<Guid> GetUserID(string Email)
         {
 
          var user = await _context.Users.Where(s => s.Email.Equals(Email)).SingleOrDefaultAsync();
-            return user.UserId;
+          
+            return user.UserId ==null? default(Guid):user.UserId;
 
         }
         public async Task<bool> updateUserData(User UserTable,string Email)
