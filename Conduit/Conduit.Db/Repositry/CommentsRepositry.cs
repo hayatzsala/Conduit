@@ -37,10 +37,10 @@ namespace Conduit.Db.Repositry
 
         public async Task<bool> DeleteComment(Guid CommentId, Guid ArticleId)
         {
-            var Article = await GetComment(CommentId,ArticleId);
-            if (Article != null)
+            var comment = await GetComment(CommentId,ArticleId);
+            if (comment != null)
             {
-                _context.Remove(Article);
+                _context.Remove(comment);
                 _context.SaveChanges();
                 return true;
             }
@@ -57,7 +57,7 @@ namespace Conduit.Db.Repositry
         public async Task<Comment> GetComment(Guid CommetntId,Guid ArticleId)
         {
             return await _context.Comments.Where(s => s.CommentId.Equals(CommetntId) &&s.ArticleId.Equals(ArticleId)
-            ).SingleOrDefaultAsync();
+            ).SingleOrDefaultAsync()??null;
         }
         public async Task<bool> Save()
         {
