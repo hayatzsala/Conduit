@@ -13,7 +13,7 @@ namespace Conduit.Service
         {
             return new List<Claim>() {
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        new Claim("UserId", model.UserId.ToString()),
+                        new Claim("Id", model.UserId.ToString()),
                         new Claim(ClaimTypes.Name, model.UserName),
                         new Claim(ClaimTypes.Email, model.Email)
                     };
@@ -22,14 +22,14 @@ namespace Conduit.Service
         public async Task<JwtSecurityToken> GetJwtSecurityToken(IConfiguration _configuration ,List<Claim> claims)
         
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
             var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             return new JwtSecurityToken(
-                        _configuration["Jwt:Issuer"],
-                        _configuration["Jwt:Audience"],
+                        _configuration["JWT:Issuer"],
+                        _configuration["JWT:Audience"],
                         claims,
-                        expires: DateTime.UtcNow.AddDays(double.Parse(_configuration["Jwt:Duration"])),
+                        expires: DateTime.UtcNow.AddMinutes(double.Parse(_configuration["JWT:Duration"])),
                         signingCredentials: signIn);
 
         }

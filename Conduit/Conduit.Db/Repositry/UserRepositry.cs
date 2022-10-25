@@ -1,22 +1,13 @@
-﻿
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using Microsoft.EntityFrameworkCore;
 namespace Conduit.Db.Repositry
 {
     public  class UserRepositry:IUserRepositry
     {
         private readonly ConduitContext _context;
-
         public UserRepositry(ConduitContext context)
         {
             _context = context;
         }
-
         public async Task<bool> CreateUser(User user)
         {
 
@@ -37,21 +28,33 @@ namespace Conduit.Db.Repositry
             return await Save();
         }
 
-        public async Task<User> GetUser(string Email)
+        public async Task<User> GetUserByEmail(string Email)
         {
-            return await _context.Users.Where(s=>s.Email.Equals(Email)).SingleOrDefaultAsync();
+            return await _context.Users.Where(s=>s.Email.Equals(Email)).SingleOrDefaultAsync()??null;
 
         }
-
-
-        public async void updateUserData(User UserTable)
+        public async Task<Guid> GetUserID(string Email)
         {
-            var User = await GetUserById(UserTable.UserId);
+
+         var user = await _context.Users.Where(s => s.Email.Equals(Email)).SingleOrDefaultAsync();
+          
+            return user.UserId ==null? default(Guid):user.UserId;
+
+        }
+        public async Task<bool> updateUserData(User UserTable,string Email)
+        {
+            var User = await GetUserByEmail(Email);
             User.UserName = UserTable.UserName;
             User.Age = UserTable.Age;
             User.Bio = UserTable.Bio;
-            User.Email = UserTable.Email;
-            _context.SaveChanges();
+            User.Password = BCrypt.Net.BCrypt.HashPassword(UserTable.Password);
+            var save = await Save();
+            if (save)
+            {
+                return true;
+
+            }
+            return false;
         }
 
 
@@ -60,19 +63,11 @@ namespace Conduit.Db.Repositry
             return await _context.Users.Where(s => s.UserId.Equals(id)).SingleOrDefaultAsync();
         }
 
-        public async Task<bool> DeleteUser(Guid id)
+
+        public async Task<IEnumerable<User>> GetAllUser()
         {
-            var User = await GetUserById(id);
-
-            if (User != null)
-            {
-                _context.Remove(User);
-
-            }
-            return await Save();
+            return await _context.Users.ToListAsync();
         }
-
-
         public async Task<bool> Save()
         {
             var saved = await _context.SaveChangesAsync();
