@@ -8,8 +8,4 @@ namespace Conduit.Model
         public string Password { get; set; }
 
     }
-
-
-
-
 }

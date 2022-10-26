@@ -22,26 +22,26 @@ namespace Conduit.Controllers
         public IMapper _mapper;
         public IUserRepositry _userRepositry;
         public IUserService _iuserService;
-  
+        public ConduitContext _context;
 
-        public ArticlesController(IArticlesRepositry articlesRepositry, IConfiguration configuration, IMapper mapper,IUserRepositry userRepositry )
+
+        public ArticlesController(IArticlesRepositry articlesRepositry, IConfiguration configuration, IMapper mapper, IUserRepositry userRepositry, ConduitContext context)
         {
             _ArticlesRepositry = articlesRepositry;
             _configuration = configuration;
             _mapper = mapper;
             _userRepositry = userRepositry;
-          
+            _context = context;
+
         }
 
-        [HttpPost("Article/",Name ="CreateArticel")]
+        [HttpPost("Articles/")]
         [Authorize]
         public async Task<IActionResult> CreateArticle(ArticleD article)
 
         {
-            var data = _iuserService.getTokenInformation();
             var  artcleData=_mapper.Map<Article>(article);
-            var userID = new Guid(data.Userid);
-             ///await _userRepositry.GetUserID(data.Email);
+            var userID = new Guid(AuthModel.UserId);
             var userCreate =await _ArticlesRepositry.CreateArticle(artcleData,userID);
 
             if (userCreate)
@@ -67,21 +67,33 @@ namespace Conduit.Controllers
 
         }
 
-        [HttpGet("/AllArticles/",Name ="GetAllArticles")]
+        [HttpGet("/AllArticle/{PageNumber}")]
         [Authorize]
-        public async Task<IActionResult> GetAllArticle()
+        public async Task<ActionResult<List<Article>>> GetAllArticle(int PageNumber)
         {
             var articles = await _ArticlesRepositry.GetAllArticle();
 
-            if (articles!=null)
+            if (articles != null)
             {
-                return Ok(articles);
-            }
+                var ArticlesNyumberInPage = 3f;
+                var pageCount = Math.Ceiling(_context.Articles.Count() / ArticlesNyumberInPage);
 
-            return BadRequest();
+                var articles = await _ArticlesRepositry.GetAllArticlePaginated(PageNumber, ArticlesNyumberInPage);
+
+                return Ok(
+                    new ArticleResponse
+                    {
+                        ArticlesList = articles,
+                        CurrentPage = PageNumber,
+                        PagesCount = (int)pageCount
+                    }
+                    );
+            }
+            return NotFound();
         }
 
-        [HttpGet("Article/", Name = "GetArticle")]
+
+        [HttpGet("Articles/")]
         [Authorize]
         public async Task<IActionResult> ReadArticle(Guid ArticleID)
         {
@@ -96,7 +108,7 @@ namespace Conduit.Controllers
         }
 
 
-        [HttpDelete("/Article/", Name = "DeleteArticle")]
+        [HttpDelete("/Articles/")]
         [Authorize]
         public async Task<IActionResult> DeleteArticle(Guid ArticleID)
         {

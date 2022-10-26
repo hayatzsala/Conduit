@@ -34,9 +34,7 @@ namespace Conduit.Controllers
         public async Task<IActionResult> addAfreind(Guid FriendId)
 
         {
-            var data = _iuserService.getTokenInformation();
-            var userID = new Guid(data.Userid);       
-                ///await _userRepositry.GetUserID(data.Email);
+            var userID = new Guid(AuthModel.UserId);       
             var Follow =await _followRepositry.followAfriend(userID, FriendId);
 
             if (Follow)

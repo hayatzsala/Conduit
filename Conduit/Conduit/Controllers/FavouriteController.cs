@@ -38,8 +38,7 @@ namespace Conduit.Controllers
         public async Task<IActionResult> AddFavourites(Guid aricleId)
 
         {
-            var data= _iuserService.getTokenInformation();
-            var userID = new Guid(data.Userid);///await _userRepositry.GetUserID(data.EmailAddress);
+            var userID = new Guid(AuthModel.UserId);
             var FavouriteCreate = await _FavouriteRepositry.AddFavourite(userID, aricleId);
 
             if (FavouriteCreate)

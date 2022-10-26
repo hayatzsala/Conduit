@@ -42,12 +42,10 @@ namespace Conduit.Controllers
                 if (HashPassword)
                 {
                     var claims = _IAuthService.GetClaim(user);
-                    var token = await _IAuthService.GetJwtSecurityToken(_configuration, claims);
+                    var WrittenToken = await _IAuthService.GetJwtSecurityToken(_configuration, claims);
+                    _IAuthService.readToken(WrittenToken);
 
-                    return Ok(new AuthModel
-                    {
-                        Token = new JwtSecurityTokenHandler().WriteToken(token)
-                    }) ;
+                    return Ok(AuthModel.Token) ;
                 }
                 else
                 {
