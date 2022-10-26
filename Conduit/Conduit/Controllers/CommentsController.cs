@@ -40,7 +40,7 @@ namespace Conduit.Controllers
         {
             var data= getTokenInformation();
             var CommentData=_mapper.Map<Comment>(Comment);
-            var userID = await _userRepositry.GetUserID(data.Email);
+            var userID = AuthModel.UserId;
             var userCreate =await _commentsRepositry.CreateComment(CommentData, userID);
 
             if (userCreate)
