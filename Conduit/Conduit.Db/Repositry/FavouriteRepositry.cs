@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Conduit.Dto;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,7 @@ namespace Conduit.Db.Repositry
     public class FavouriteRepositry:IFavouriteRepositry
     {
         private readonly ConduitContext _context;
+        public IMapper _mapper;
 
         public FavouriteRepositry(ConduitContext context)
         {

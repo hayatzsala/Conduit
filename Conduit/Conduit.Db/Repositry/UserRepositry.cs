@@ -1,27 +1,29 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Conduit.Dto;
+using Microsoft.EntityFrameworkCore;
 namespace Conduit.Db.Repositry
 {
     public  class UserRepositry:IUserRepositry
     {
         private readonly ConduitContext _context;
-        public UserRepositry(ConduitContext context)
+        public IMapper _mapper;
+
+        public UserRepositry(ConduitContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
-        public async Task<bool> CreateUser(User user)
+
+        public User ArticleMapping(UserD user)
+        {
+            return _mapper.Map<User>(user);
+        }
+        public async Task<bool> CreateUser(UserD user)
         {
 
             var userCreate = await _context.Users.AddAsync(
 
-                 new User
-                 {
-                     UserId= user.UserId,
-                     Age = user.Age,
-                     Bio = user.Bio,
-                     Email = user.Email,
-                     Password = user.Password,
-                     UserName = user.UserName,
-                 }
+                ArticleMapping(user)
 
                  );
 

@@ -26,6 +26,8 @@ builder.Services.AddScoped<IFavouriteRepositry,FavouriteRepositry>();
 builder.Services.AddScoped<IpasswordHasher, BycryptPasswordHasher>();
 builder.Services.AddTransient<IUserRepositry, UserRepositry>();
 builder.Services.AddTransient<IUserService, TokenInformation>();
+builder.Services.AddTransient<IArticlesRepositry, ArticleRepositry>();
+builder.Services.AddTransient<IFollowRepositry, FollowRepositry>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.Configure<Jwt>(builder.Configuration.GetSection("JWT"));

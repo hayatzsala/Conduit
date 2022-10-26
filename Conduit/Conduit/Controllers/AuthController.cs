@@ -62,7 +62,7 @@ namespace Conduit.Controllers
 
 
         [HttpPost("SignUp", Name = "CreateUser")]
-        public async Task<IActionResult> SignUp(User user)
+        public async Task<IActionResult> SignUp(UserD user)
         {
             var UserExist = await _UserRepositry.GetUserByEmail(user.Email);
 
@@ -73,16 +73,7 @@ namespace Conduit.Controllers
                 var createUser = await _UserRepositry.CreateUser(user);
                 if (createUser)
                 {
-                    return Ok(
-                        new User
-                        {
-                            Email = user.Email,
-                            UserName = user.UserName,
-                            Age = user.Age,
-                            Password = user.Password,
-                            Bio = user.Bio
-                        }
-                        );
+                    return Ok("Created !");
                 }
 
                 return BadRequest("Try Again :( !");
