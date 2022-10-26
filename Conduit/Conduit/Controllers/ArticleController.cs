@@ -41,7 +41,7 @@ namespace Conduit.Controllers
 
         {
             var  artcleData=_mapper.Map<Article>(article);
-            var userID = new Guid(AuthModel.UserId);
+            var userID =  Guid.Parse(AuthModel.UserId);
             var userCreate =await _ArticlesRepositry.CreateArticle(artcleData,userID);
 
             if (userCreate)

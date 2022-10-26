@@ -40,7 +40,7 @@ namespace Conduit.Controllers
         {
             var data= getTokenInformation();
             var CommentData=_mapper.Map<Comment>(Comment);
-            var userID = AuthModel.UserId;
+            var userID = Guid.Parse(AuthModel.UserId);
             var userCreate =await _commentsRepositry.CreateComment(CommentData, userID);
 
             if (userCreate)
@@ -92,26 +92,6 @@ namespace Conduit.Controllers
             }
 
             return BadRequest();
-        }
-
-
-        private AuthModel getTokenInformation()
-        {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-
-            if (identity != null)
-            {
-                var userClaims = identity.Claims;
-                var AuthModel = new AuthModel
-                {
-                    Email = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
-                   Username= userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Name)?.Value
-            };
-
-                return AuthModel;
-            }
-            return null;
-
         }
 
 
