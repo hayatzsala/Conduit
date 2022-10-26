@@ -22,20 +22,19 @@ namespace Conduit.Controllers
         public IFollowRepositry _followRepositry;
         public IUserService _iuserService;
 
-        public FollowController(IConfiguration configuration, IMapper mapper, IUserRepositry userRepositry, IFollowRepositry followRepositry)
+        public FollowController(IConfiguration configuration, IMapper mapper, IUserRepositry userRepositry, IFollowRepositry followRepositry = null)
         {
             _configuration = configuration;
             _userRepositry = userRepositry;
             _followRepositry = followRepositry;
         }
 
-        [HttpPost("Follow/",Name ="AddFollower")]
+        [HttpPost("Follow/",Name ="AddFavourite")]
         [Authorize]
         public async Task<IActionResult> addAfreind(Guid FriendId)
 
         {
-            var data = getTokenInformation();
-            var userID = await _userRepositry.GetUserID(data.Email);
+            var userID = new Guid(AuthModel.UserId);       
             var Follow =await _followRepositry.followAfriend(userID, FriendId);
 
             if (Follow)
@@ -43,24 +42,6 @@ namespace Conduit.Controllers
                 return Ok("Followed !");
             }           
             return BadRequest();
-        }
-        private AuthModel getTokenInformation()
-        {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-
-            if (identity != null)
-            {
-                var userClaims = identity.Claims;
-                var AuthModel = new AuthModel
-                {
-                    Email = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
-                    Username = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Name)?.Value
-                };
-
-                return AuthModel;
-            }
-            return null;
-
         }
 
     }

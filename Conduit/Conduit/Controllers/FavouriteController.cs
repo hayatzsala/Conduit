@@ -38,8 +38,7 @@ namespace Conduit.Controllers
         public async Task<IActionResult> AddFavourites(Guid aricleId)
 
         {
-            var data= _iuserService.getTokenInformation();
-            var userID = await _userRepositry.GetUserID(data.EmailAddress);
+            var userID = new Guid(AuthModel.UserId);
             var FavouriteCreate = await _FavouriteRepositry.AddFavourite(userID, aricleId);
 
             if (FavouriteCreate)
@@ -47,24 +46,6 @@ namespace Conduit.Controllers
                 return Ok("Added Successfully !");
             }           
             return BadRequest();
-        }
-        private AuthModel getTokenInformation()
-        {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-
-            if (identity != null)
-            {
-                var userClaims = identity.Claims;
-                var AuthModel = new AuthModel
-                {
-                    Email = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
-                    Username = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Name)?.Value
-                };
-
-                return AuthModel;
-            }
-            return null;
-
         }
 
     }

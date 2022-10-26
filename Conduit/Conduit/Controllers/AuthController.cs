@@ -42,12 +42,10 @@ namespace Conduit.Controllers
                 if (HashPassword)
                 {
                     var claims = _IAuthService.GetClaim(user);
-                    var token = await _IAuthService.GetJwtSecurityToken(_configuration, claims);
+                    var WrittenToken = await _IAuthService.GetJwtSecurityToken(_configuration, claims);
+                    _IAuthService.readToken(WrittenToken);
 
-                    return Ok(new AuthModel
-                    {
-                        Token = new JwtSecurityTokenHandler().WriteToken(token)
-                    }) ;
+                    return Ok(AuthModel.Token) ;
                 }
                 else
                 {
@@ -62,7 +60,7 @@ namespace Conduit.Controllers
 
 
         [HttpPost("SignUp", Name = "CreateUser")]
-        public async Task<IActionResult> SignUp(UserD user)
+        public async Task<IActionResult> SignUp(User user)
         {
             var UserExist = await _UserRepositry.GetUserByEmail(user.Email);
 
@@ -73,7 +71,16 @@ namespace Conduit.Controllers
                 var createUser = await _UserRepositry.CreateUser(user);
                 if (createUser)
                 {
-                    return Ok("Created !");
+                    return Ok(
+                        new User
+                        {
+                            Email = user.Email,
+                            UserName = user.UserName,
+                            Age = user.Age,
+                            Password = user.Password,
+                            Bio = user.Bio
+                        }
+                        );
                 }
 
                 return BadRequest("Try Again :( !");

@@ -1,4 +1,5 @@
 ﻿using Conduit.Db;
+using Conduit.Model;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace Conduit.Service
 {
-    public class AuthService: IAuthService
+    public class AuthService : IAuthService
     {
 
         public List<Claim> GetClaim(User model)
@@ -21,21 +22,33 @@ namespace Conduit.Service
                     };
         }
 
-        public async Task<JwtSecurityToken> GetJwtSecurityToken(IConfiguration _configuration ,List<Claim> claims)
-        
+        public async Task<string> GetJwtSecurityToken(IConfiguration _configuration, List<Claim> claims)
+
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
             var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            return new JwtSecurityToken(
-                        _configuration["JWT:Issuer"],
-                        _configuration["JWT:Audience"],
-                        claims,
-                        expires: DateTime.UtcNow.AddMinutes(double.Parse(_configuration["JWT:Duration"])),
-                        signingCredentials: signIn);
+            JwtSecurityToken token = new JwtSecurityToken(
+                             _configuration["JWT:Issuer"],
+                             _configuration["JWT:Audience"],
+                             claims,
+                             expires: DateTime.UtcNow.AddMinutes(double.Parse(_configuration["JWT:Duration"])),
+                             signingCredentials: signIn);
+
+
+            var Securitytoken = new JwtSecurityTokenHandler().WriteToken(token);
+            return Securitytoken;
 
         }
 
+        public void readToken(string Securitytoken)
+        {
+            var tokenRead = new JwtSecurityTokenHandler().ReadJwtToken(Securitytoken);
+            AuthModel.Token = Securitytoken;
+            AuthModel.Email = tokenRead.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
+            AuthModel.UserId = tokenRead.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        }
     }
 }
 

@@ -25,7 +25,6 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IFavouriteRepositry,FavouriteRepositry>();
 builder.Services.AddScoped<IpasswordHasher, BycryptPasswordHasher>();
 builder.Services.AddTransient<IUserRepositry, UserRepositry>();
-builder.Services.AddTransient<IUserService, TokenInformation>();
 builder.Services.AddTransient<IArticlesRepositry, ArticleRepositry>();
 builder.Services.AddTransient<IFollowRepositry, FollowRepositry>();
 
