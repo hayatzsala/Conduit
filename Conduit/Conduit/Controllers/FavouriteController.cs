@@ -33,14 +33,13 @@ namespace Conduit.Controllers
             _FavouriteRepositry = favouriteRepositry;
         }
 
-        [HttpPost("Favourite/",Name ="AddFavourite")]
+        [HttpPost("Favourites/")]
         [Authorize]
-        public async Task<IActionResult> AddFavourite(Guid aricleId)
+        public async Task<IActionResult> AddFavourites(Guid aricleId)
 
         {
             var data= _iuserService.getTokenInformation();
-            var userID = new Guid(data.Userid);
-            ///await _userRepositry.GetUserID(data.EmailAddress);
+            var userID = new Guid(data.Userid);///await _userRepositry.GetUserID(data.EmailAddress);
             var FavouriteCreate = await _FavouriteRepositry.AddFavourite(userID, aricleId);
 
             if (FavouriteCreate)
