@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Conduit.Dto;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Conduit.Db
 {
     public interface IUserRepositry
 {
-        public  Task<bool> CreateUser(User user);
+        public  Task<bool> CreateUser(UserD user);
         public  Task<User> GetUserByEmail(string Email);
         public Task<bool> updateUserData(User UserTable, string Email);
         public Task<User> GetUserById(Guid id);

@@ -21,11 +21,7 @@ namespace Conduit.Db.Repositry
         public async Task<bool> CreateUser(UserD user)
         {
 
-            var userCreate = await _context.Users.AddAsync(
-
-                ArticleMapping(user)
-
-                 );
+            var userCreate = await _context.Users.AddAsync(ArticleMapping(user));
 
             return await Save();
         }
@@ -40,7 +36,7 @@ namespace Conduit.Db.Repositry
 
          var user = await _context.Users.Where(s => s.Email.Equals(Email)).SingleOrDefaultAsync();
           
-            return user.UserId ==null? default(Guid):user.UserId;
+            return user?.UserId ==null? default(Guid):user.UserId;
 
         }
         public async Task<bool> updateUserData(User UserTable,string Email)
@@ -51,6 +47,7 @@ namespace Conduit.Db.Repositry
             User.Bio = UserTable.Bio;
             User.Password = BCrypt.Net.BCrypt.HashPassword(UserTable.Password);
             var save = await Save();
+
             if (save)
             {
                 return true;
@@ -59,17 +56,16 @@ namespace Conduit.Db.Repositry
             return false;
         }
 
-
         public async Task<User> GetUserById(Guid id)
         {
             return await _context.Users.Where(s => s.UserId.Equals(id)).SingleOrDefaultAsync();
         }
 
-
         public async Task<IEnumerable<User>> GetAllUser()
         {
             return await _context.Users.ToListAsync();
         }
+
         public async Task<bool> Save()
         {
             var saved = await _context.SaveChangesAsync();
