@@ -26,7 +26,18 @@ namespace Conduit.Db.Repositry
         }
         public async Task<bool> CreateArticle(ArticleD article,Guid userId)
         {
-            await _context.Articles.AddAsync(ArticleMapping(article));
+            await _context.Articles.AddAsync(
+                new Article
+                {
+                    ArticleId = new Guid(),
+                    Description=article.Description,
+                    Image=article.Image,
+                    Title=article.Title,
+                    UserId=userId
+                }
+
+                ); ;
+
             return await Save();
         }
 
