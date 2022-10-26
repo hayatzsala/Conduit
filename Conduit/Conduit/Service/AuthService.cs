@@ -15,7 +15,9 @@ namespace Conduit.Service
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim("Id", model.UserId.ToString()),
                         new Claim(ClaimTypes.Name, model.UserName),
-                        new Claim(ClaimTypes.Email, model.Email)
+                        new Claim(ClaimTypes.Email, model.Email),
+                        new Claim(ClaimTypes.NameIdentifier, model.UserId.ToString())
+
                     };
         }
 
