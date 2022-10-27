@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Conduit.Dto;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,26 +13,20 @@ namespace Conduit.Db.Repositry
     {
 
         private readonly ConduitContext _context;
-        public ArticleRepositry(ConduitContext context)
+        public IMapper _mapper;
+        public ArticleRepositry(ConduitContext context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
-        public async Task<bool> CreateArticle(Article article,Guid userId)
+
+        public Article ArticleMapping(ArticleD article)
         {
-
-           await _context.Articles.AddAsync(
-
-                 new Article
-                 {
-                     ArticleId = article.ArticleId,
-                    Description = article.Description,
-                    Image=article.Image,
-                    Title = article.Title,
-                    UserId= userId
-                 }
-
-                 );
-
+            return _mapper.Map<Article>(article);
+        }
+        public async Task<bool> CreateArticle(ArticleD article,Guid userId)
+        {
+            await _context.Articles.AddAsync(ArticleMapping(article));
             return await Save();
         }
 
@@ -50,6 +46,10 @@ namespace Conduit.Db.Repositry
         public async Task<IEnumerable<Article>> GetAllArticle()
         {
             return await _context.Articles.Select(s => s).ToListAsync();
+        }  
+        public  async Task<List<Article>> GetAllArticlePaginated(int PageNumber,double pageResult)
+        {
+            return  await  _context.Articles.Skip((PageNumber-1)*(int)pageResult).Take((int)pageResult).ToListAsync();
         }
 
         public async Task<Article> GetArticleById(Guid ArticleId)

@@ -22,6 +22,7 @@ namespace Conduit.Controllers
         public IMapper _mapper;
         public IUserRepositry _userRepositry;
         public IFavouriteRepositry _FavouriteRepositry;
+        public IUserService _iuserService;
 
         public FavouriteController(IArticlesRepositry articlesRepositry, IConfiguration configuration, IMapper mapper, IUserRepositry userRepositry, IFavouriteRepositry favouriteRepositry)
         {
@@ -32,15 +33,13 @@ namespace Conduit.Controllers
             _FavouriteRepositry = favouriteRepositry;
         }
 
-        [HttpPost("Favourite/",Name ="AddFavourite")]
+        [HttpPost("Favourites/")]
         [Authorize]
-        public async Task<IActionResult> AddFavourite(Guid aricleId)
+        public async Task<IActionResult> AddFavourites(Guid aricleId)
 
         {
-            var data= getTokenInformation();
-            var CommentData=_mapper.Map<Comment>(Comment);
-            var userID = await _userRepositry.GetUserID(data.Email);
-            var FavouriteCreate =await _FavouriteRepositry.AddFavourite(userID,aricleId);
+            var userID = new Guid(AuthModel.UserId);
+            var FavouriteCreate = await _FavouriteRepositry.AddFavourite(userID, aricleId);
 
             if (FavouriteCreate)
             {
@@ -48,26 +47,6 @@ namespace Conduit.Controllers
             }           
             return BadRequest();
         }
-
-        private AuthModel getTokenInformation()
-        {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-
-            if (identity != null)
-            {
-                var userClaims = identity.Claims;
-                var AuthModel = new AuthModel
-                {
-                    Email = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
-                   Username= userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Name)?.Value
-            };
-
-                return AuthModel;
-            }
-            return null;
-
-        }
-
 
     }
 }

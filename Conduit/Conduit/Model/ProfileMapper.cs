@@ -12,6 +12,8 @@ namespace Conduit.Model
             CreateMap<UserD, User>();
             CreateMap<ArticleD, Article>();
             CreateMap<Article, ArticleD>();
+            CreateMap<Favourite, FavouriteD>();
+            CreateMap<FavouriteD,Favourite>();
         }
     }
 }

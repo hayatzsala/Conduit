@@ -6,5 +6,6 @@ namespace Conduit.Model
     {
         public static string Username { get; set; }
         public string EmailAddress { get; set; }
+        public string Userid { get; set; }
     }
 }

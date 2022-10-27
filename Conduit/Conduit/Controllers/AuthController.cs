@@ -34,7 +34,7 @@ namespace Conduit.Controllers
         [HttpPost("SignIn" , Name = "SignInUser")]
         public async Task<IActionResult> SiginIn([FromBody] SignInModel model)
         {
-            var user = await _UserRepositry.GetUser(model.Email);
+            var user = await _UserRepositry.GetUserByEmail(model.Email);
 
             if (user != null )
             {
@@ -42,19 +42,10 @@ namespace Conduit.Controllers
                 if (HashPassword)
                 {
                     var claims = _IAuthService.GetClaim(user);
-                    var token = await _IAuthService.GetJwtSecurityToken(_configuration, claims);
+                    var WrittenToken = await _IAuthService.GetJwtSecurityToken(_configuration, claims);
+                    _IAuthService.readToken(WrittenToken);
 
-                    return Ok(
-                       new AuthModel
-                       {
-                           Email = user.Email,
-                           Username = user.UserName,
-                           IsAuthenticated = true,
-                           Message = "SignInSucccefully",
-                           Token = new JwtSecurityTokenHandler().WriteToken(token),
-                           ExpiresOn = _configuration["Jwt:Duration"],
-                       }
-                        );
+                    return Ok(AuthModel.Token) ;
                 }
                 else
                 {
@@ -69,20 +60,19 @@ namespace Conduit.Controllers
 
 
         [HttpPost("SignUp", Name = "CreateUser")]
-        public async Task<IActionResult> SignUp(UserD user)
+        public async Task<IActionResult> SignUp(User user)
         {
-            var UserData = _mapper.Map<User>(user);
-            var UserExist = await _UserRepositry.GetUser(UserData.Email);
+            var UserExist = await _UserRepositry.GetUserByEmail(user.Email);
 
-            if (UserExist != null)
+            if (UserExist == null)
             {
-                UserData.Password = _ipasswordHasher.HashPassword(UserData.Password);
+                user.Password = _ipasswordHasher.HashPassword(user.Password);
 
-                var createUser = await _UserRepositry.CreateUser(UserData);
+                var createUser = await _UserRepositry.CreateUser(user);
                 if (createUser)
                 {
                     return Ok(
-                        new UserD
+                        new User
                         {
                             Email = user.Email,
                             UserName = user.UserName,

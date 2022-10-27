@@ -1,4 +1,5 @@
 ﻿using Conduit.Db;
+using Conduit.Model;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -14,6 +15,7 @@ namespace Conduit.Service
     public interface IAuthService
     {
         public List<Claim> GetClaim(User model);
-        public Task<JwtSecurityToken> GetJwtSecurityToken(IConfiguration _configuration, List<Claim> claims);
+        public Task<string> GetJwtSecurityToken(IConfiguration _configuration, List<Claim> claims);
+        public void readToken(string Securitytoken);
     }
 }

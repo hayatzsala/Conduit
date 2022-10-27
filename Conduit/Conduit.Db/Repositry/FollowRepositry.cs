@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Conduit.Dto;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,25 +7,24 @@ using System.Threading.Tasks;
 
 namespace Conduit.Db.Repositry
 {
-    public class FavouriteRepositry:IFavouriteRepositry
+    public class FollowRepositry:IFollowRepositry
     {
         private readonly ConduitContext _context;
-        public IMapper _mapper;
 
-        public FavouriteRepositry(ConduitContext context)
+        public FollowRepositry(ConduitContext context)
         {
             _context = context;
         }
 
-        public async Task<bool> AddFavourite(Guid userId ,Guid articleId)
+        public async Task<bool> followAfriend(Guid userId,Guid FriendId)
         {
-             await _context.Favourites.AddAsync(
+            await _context.Followers.AddAsync(
 
-               new Favourite
+               new Follower
                {
-                  ArticleId = articleId,
                   UserId = userId,
-             
+                  FollowerId= FriendId
+
                });
             return await Save();
 

@@ -20,34 +20,31 @@ namespace Conduit.Controllers
         public readonly IUserRepositry _UserRepositry;
         public IConfiguration _configuration;
         public IMapper _mapper;
-  
+        public IUserService _iuserService;
 
-        public UserController(IUserRepositry userRepositry, IConfiguration configuration, IMapper mapper )
+
+        public UserController(IUserRepositry userRepositry, IConfiguration configuration, IMapper mapper, IUserService iuserService)
         {
             _UserRepositry = userRepositry;
             _configuration = configuration;
             _mapper = mapper;
-          
+            _iuserService = iuserService;
         }
 
         [HttpGet("user/",Name ="GetUser")]
         [Authorize]
         public async Task<IActionResult> getUser()
         {
-            var data= getTokenInformation();
-
-            var user = await _UserRepositry.GetUserByEmail(data.EmailAddress);
+            var user = await _UserRepositry.GetUserByEmail(AuthModel.Email);
             return Ok(user);
 
         }
-
-
 
         [HttpGet("Alluser/", Name = "GetAllUser")]
         [Authorize]
         public async Task<IActionResult> AllUser()
         {
-            var data = getTokenInformation();
+            var data = _iuserService.getTokenInformation();
 
             var user = await _UserRepositry.GetAllUser();
 
@@ -59,10 +56,9 @@ namespace Conduit.Controllers
         [Authorize]
         public async Task<IActionResult> UpdateUser(UserD user)
         {
-            var dataToken = getTokenInformation();
            var userd = _mapper.Map<User>(user);
 
-            var UserData = await _UserRepositry.updateUserData(userd, dataToken.EmailAddress);
+            var UserData = await _UserRepositry.updateUserData(userd, AuthModel.Email);
 
             if (UserData)
             {
@@ -72,28 +68,6 @@ namespace Conduit.Controllers
 
             return BadRequest();
         }
-
-
-        private UserModel getTokenInformation()
-        {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-
-            if (identity != null)
-            {
-                var userClaims = identity.Claims;
-
-                var userModel= new UserModel
-                {
-                    EmailAddress = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
-                };
-
-                return userModel;
-            }
-            return null;
-
-        }
-
-
     }
 }
 
