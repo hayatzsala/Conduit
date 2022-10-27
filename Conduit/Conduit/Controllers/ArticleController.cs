@@ -74,7 +74,7 @@ namespace Conduit.Controllers
 
             if (articles != null)
             {
-                var ArticlesNyumberInPage = 3f;
+                const int  ArticlesNyumberInPage = 3;
                 var pageCount = Math.Ceiling(_context.Articles.Count() / ArticlesNyumberInPage);
 
                 var article = await _ArticlesRepositry.GetAllArticlePaginated(PageNumber, ArticlesNyumberInPage);
