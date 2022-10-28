@@ -60,7 +60,7 @@ namespace Conduit.Controllers
 
 
         [HttpPost("SignUp", Name = "CreateUser")]
-        public async Task<IActionResult> SignUp(User user)
+        public async Task<IActionResult> SignUp(UserD user)
         {
             var UserExist = await _UserRepositry.GetUserByEmail(user.Email);
 

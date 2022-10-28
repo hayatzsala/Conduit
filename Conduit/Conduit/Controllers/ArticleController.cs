@@ -40,9 +40,8 @@ namespace Conduit.Controllers
         public async Task<IActionResult> CreateArticle(ArticleD article)
 
         {
-            var  artcleData=_mapper.Map<Article>(article);
-            var userID = new Guid(AuthModel.UserId);
-            var userCreate =await _ArticlesRepositry.CreateArticle(artcleData,userID);
+            var userID = Guid.Parse(AuthModel.UserId);
+            var userCreate =await _ArticlesRepositry.CreateArticle(article, userID);
 
             if (userCreate)
             {
@@ -75,15 +74,15 @@ namespace Conduit.Controllers
 
             if (articles != null)
             {
-                var ArticlesNyumberInPage = 3f;
+                const int  ArticlesNyumberInPage = 3;
                 var pageCount = Math.Ceiling(_context.Articles.Count() / ArticlesNyumberInPage);
 
-                var articles = await _ArticlesRepositry.GetAllArticlePaginated(PageNumber, ArticlesNyumberInPage);
+                var article = await _ArticlesRepositry.GetAllArticlePaginated(PageNumber, ArticlesNyumberInPage);
 
                 return Ok(
                     new ArticleResponse
                     {
-                        ArticlesList = articles,
+                        ArticlesList = article,
                         CurrentPage = PageNumber,
                         PagesCount = (int)pageCount
                     }
