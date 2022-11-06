@@ -22,7 +22,7 @@ namespace Conduit.Controllers
         public IFollowRepositry _followRepositry;
         public IUserService _iuserService;
 
-        public FollowController(IConfiguration configuration, IMapper mapper, IUserRepositry userRepositry, IFollowRepositry followRepositry = null)
+        public FollowController(IConfiguration configuration, IMapper mapper, IUserRepositry userRepositry, IFollowRepositry followRepositry )
         {
             _configuration = configuration;
             _userRepositry = userRepositry;

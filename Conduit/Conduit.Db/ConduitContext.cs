@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,11 @@ namespace Conduit.Db
     public  class ConduitContext: DbContext
     {
         public ConduitContext(DbContextOptions<ConduitContext> options) : base(options)
+        {
+
+        }
+
+        public ConduitContext()
         {
 
         }
@@ -29,6 +35,10 @@ namespace Conduit.Db
         public DbSet<Favourite> Favourites { get; set; }
         public DbSet<Follower> Followers { get; set; }
         public DbSet<User> Users { get; set; }
-      
+
+        public static implicit operator ConduitContext(Mock<ConduitContext> v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

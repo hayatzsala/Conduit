@@ -6,10 +6,7 @@ using Conduit.Service;
 using Conduit.Service.passwordHasher;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+
 
 namespace Conduit.Controllers
 {
@@ -38,7 +35,6 @@ namespace Conduit.Controllers
         public async Task<IActionResult> CreateComment(CommentD Comment)
 
         {
-            var data= getTokenInformation();
             var CommentData=_mapper.Map<Comment>(Comment);
             var userID = Guid.Parse(AuthModel.UserId);
             var userCreate =await _commentsRepositry.CreateComment(CommentData, userID);
@@ -49,6 +45,9 @@ namespace Conduit.Controllers
             }           
             return BadRequest();
         }
+
+
+
 
 
         [HttpGet("/AllComments/",Name ="GetAlComments")]
@@ -64,6 +63,7 @@ namespace Conduit.Controllers
 
             return BadRequest();
         }
+
 
         [HttpGet("Comment/", Name = "GetComment")]
         [Authorize]

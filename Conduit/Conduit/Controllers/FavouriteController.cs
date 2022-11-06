@@ -39,9 +39,9 @@ namespace Conduit.Controllers
 
         {
             var userID = new Guid(AuthModel.UserId);
-            var FavouriteCreate = await _FavouriteRepositry.AddFavourite(userID, aricleId);
+            var FavouriteCreateStatus = await _FavouriteRepositry.AddFavourite(userID, aricleId);
 
-            if (FavouriteCreate)
+            if (FavouriteCreateStatus)
             {
                 return Ok("Added Successfully !");
             }           

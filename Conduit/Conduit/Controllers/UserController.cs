@@ -44,8 +44,6 @@ namespace Conduit.Controllers
         [Authorize]
         public async Task<IActionResult> AllUser()
         {
-            var data = _iuserService.getTokenInformation();
-
             var user = await _UserRepositry.GetAllUser();
 
             return Ok(user);
@@ -54,19 +52,18 @@ namespace Conduit.Controllers
 
         [HttpPut("user/",Name ="UpdateUserData")]
         [Authorize]
-        public async Task<IActionResult> UpdateUser(UserD user)
+        public async Task<IActionResult> UpdateUser(UserD userd)
         {
-           var userd = _mapper.Map<User>(user);
+           var user = _mapper.Map<User>(userd);
+            var email = AuthModel.Email;
 
-            var UserData = await _UserRepositry.updateUserData(userd, AuthModel.Email);
+            var UserData = await _UserRepositry.updateUserData(user, email);
 
             if (UserData)
             {
-          
-                return Ok("Updated Succefully");
+                return Ok();
             }
-
-            return BadRequest();
+           return BadRequest();
         }
     }
 }

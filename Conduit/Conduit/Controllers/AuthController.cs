@@ -32,7 +32,7 @@ namespace Conduit.Controllers
         }
 
         [HttpPost("SignIn" , Name = "SignInUser")]
-        public async Task<IActionResult> SiginIn([FromBody] SignInModel model)
+        public async Task<IActionResult> siginIn([FromBody] SignInModel model)
         {
             var user = await _UserRepositry.GetUserByEmail(model.Email);
 
@@ -57,6 +57,10 @@ namespace Conduit.Controllers
                 return BadRequest("Invalid credentials");
             }
         }
+
+
+
+
 
 
         [HttpPost("SignUp", Name = "CreateUser")]

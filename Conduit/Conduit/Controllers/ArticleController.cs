@@ -66,25 +66,26 @@ namespace Conduit.Controllers
 
         }
 
-        [HttpGet("/AllArticle/{PageNumber}")]
+        [HttpGet("/allarticle/{pagenumber}")]
         [Authorize]
-        public async Task<ActionResult<List<Article>>> GetAllArticle(int PageNumber)
+        public async Task<ActionResult<List<Article>>> getAllarticle(int pageNumber)
         {
             var articles = await _ArticlesRepositry.GetAllArticle();
 
             if (articles != null)
             {
-                const int  ArticlesNyumberInPage = 3;
-                var pageCount = Math.Ceiling(_context.Articles.Count() / ArticlesNyumberInPage);
+                const double ArticlesNumberinPage = 3f;
 
-                var article = await _ArticlesRepositry.GetAllArticlePaginated(PageNumber, ArticlesNyumberInPage);
+                var pagecount = Math.Ceiling(_context.Articles.Count() / ArticlesNumberinPage);
+
+                var article = await _ArticlesRepositry.GetAllArticlePaginated(pageNumber, ArticlesNumberinPage);
 
                 return Ok(
                     new ArticleResponse
                     {
                         ArticlesList = article,
-                        CurrentPage = PageNumber,
-                        PagesCount = (int)pageCount
+                        CurrentPage = pageNumber,
+                        PagesCount = (int)pagecount
                     }
                     );
             }
