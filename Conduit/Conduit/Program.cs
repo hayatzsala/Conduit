@@ -23,9 +23,9 @@ builder.Services.AddDbContext<ConduitContext>(options => {
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IFavouriteRepositry,FavouriteRepositry>();
 builder.Services.AddScoped<IpasswordHasher, BycryptPasswordHasher>();
-builder.Services.AddTransient<IUserRepositry, UserRepositry>();
-builder.Services.AddTransient<IArticlesRepositry, ArticleRepositry>();
-builder.Services.AddTransient<IFollowRepositry, FollowRepositry>();
+builder.Services.AddScoped<IUserRepositry, UserRepositry>();
+builder.Services.AddScoped<IArticlesRepositry, ArticleRepositry>();
+builder.Services.AddScoped<IFollowRepositry, FollowRepositry>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
